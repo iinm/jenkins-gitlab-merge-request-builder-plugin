@@ -41,7 +41,7 @@ public class GitlabBuilds {
     	boolean shouldRun = true;
     	GitlabAPI api = trigger.getBuilder().getGitlab().get();
         String triggerComment = trigger.getTriggerComment();
-        GitlabNote lastNote = getLastNote(mergeRequest, api);
+        //GitlabNote lastNote = getLastNote(mergeRequest, api);
     	
     	if (isAllowedByTargetBranchRegex(cause.getTargetBranch())) {
             LOGGER.log(Level.INFO, "The target regex matches the target branch {" + cause.getTargetBranch() + "}. Source branch {" + cause.getSourceBranch() + "}");
@@ -55,10 +55,10 @@ public class GitlabBuilds {
         	shouldRun = false;
         }
 
-        if (lastNote != null && lastNote.getBody().equals(triggerComment)) {
-            LOGGER.info("Trigger comment found");
-            shouldRun = true;
-        }
+        //if (lastNote != null && lastNote.getBody().equals(triggerComment)) {
+        //    LOGGER.info("Trigger comment found");
+        //    shouldRun = true;
+        //}
 
     	if (shouldRun) {
     		String assigneeFilter = trigger.getAssigneeFilter();

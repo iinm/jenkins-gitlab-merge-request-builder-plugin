@@ -25,7 +25,7 @@ public class GitlabMergeRequestBuilder {
     }
 
     public void run() {
-        repository.check();
+        repository.check(trigger);
     }
 
     public GitlabMergeRequestBuilder setTrigger(GitlabBuildTrigger trigger) {

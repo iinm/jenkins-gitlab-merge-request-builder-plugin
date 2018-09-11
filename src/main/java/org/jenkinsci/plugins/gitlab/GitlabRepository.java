@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.gitlab;
 
+import org.apache.commons.lang.StringUtils;
 import org.gitlab.api.GitlabAPI;
 import org.gitlab.api.models.GitlabCommitStatus;
 import org.gitlab.api.models.GitlabMergeRequest;
@@ -49,7 +50,7 @@ public class GitlabRepository {
         return project != null;
     }
 
-    public void check() {
+    public void check(GitlabBuildTrigger trigger) {
         if (!checkState()) {
             return;
         }
@@ -65,6 +66,16 @@ public class GitlabRepository {
         Set<Integer> closedMergedRequests = new HashSet<Integer>(this.mergeRequests.keySet());
 
         for (GitlabMergeRequest mergeRequest : mergeRequests) {
+            boolean shouldCheck = false;
+            for (String label : mergeRequest.getLabels()) {
+            	if (StringUtils.isNotEmpty(trigger.getTagFilter()) && label.equals(trigger.getTagFilter())) {
+            	    shouldCheck = true;
+            	    break;
+                }
+            }
+        	if (!shouldCheck) {
+        	    continue;
+            }
             check(mergeRequest);
             closedMergedRequests.remove(mergeRequest.getId());
         }
